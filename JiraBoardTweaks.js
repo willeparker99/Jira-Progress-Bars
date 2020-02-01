@@ -9,9 +9,10 @@
 // ==/UserScript==
 
 (function() {
-  (function addCustom() {
-    const GH = window.GH;
 
+  (function addCustom() {
+    console.log("Refreshing Header")
+    const GH = window.GH;
     addGlobalStyle(
       ".tamper-progress-bars { position: absolute; background-color: rgba(0, 180, 0, 0.3); z-index: 1; top: 0px; bottom: 0px; left: 0px; height: inherit; border-radius: 4px }"
     );
@@ -26,7 +27,6 @@
     };
 
     for (const obj in currentItems) {
-        console.log(currentItems[obj].statusName);
       switch (currentItems[obj].statusName) {
         case "Open":
           amounts["To Do"]++;
@@ -45,14 +45,12 @@
       }
       index++
     }
-    console.log(amounts["Done"]);
 
     amounts["To Do"] = ((index - amounts["To Do"]) / index) * 100;
     amounts["In Progress"] = ((index - amounts["In Progress"]) / index) * 100;
     amounts["Functional Testing"] = ((index - amounts["Functional Testing"]) / index) * 100;
     amounts["Done"] = (amounts["Done"] / index) * 100;
 
-    console.log(amounts);
     GH.tpl.rapid.swimlane.renderColumnsHeader = function render(
       opt_data,
       opt_ignored
