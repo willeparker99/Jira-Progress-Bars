@@ -14,7 +14,7 @@
     console.log("Refreshing Header")
     const GH = window.GH;
     addGlobalStyle(
-      ".tamper-progress-bars { position: absolute; background-color: rgba(0, 180, 0, 0.3); z-index: 1; top: 0px; bottom: 0px; left: 0px; height: inherit; border-radius: 4px }"
+      ".tamper-progress-bars { position: absolute; z-index: 1; top: 0px; bottom: 0px; left: 0px; height: inherit; border-radius: 4px }"
     );
 
     const currentItems = GH.GridDataController.model.data.issues;
@@ -89,7 +89,7 @@
               }) +
               "</div>"
             : "") +
-          `<div class="tamper-progress-bars" style="width: ${amounts[columnData162.name]}%;"></div></div></li>`;
+          `<div class="tamper-progress-bars" style="width: ${amounts[columnData162.name]}%;background-color: hsla(${clamp(amounts[columnData162.name], 0, 100)}, 100%, 50%, 0.4)"></div></div></li>`;
       }
       output += '</ul><div id="ghx-swimlane-header-stalker"></div></div>';
       return output;
@@ -102,5 +102,8 @@
     style.type = "text/css";
     style.textContent = css;
     head.appendChild(style);
+  }
+  function clamp(number, min, max) {
+    return Math.min(Math.max(number, min), max);
   }
 })();
