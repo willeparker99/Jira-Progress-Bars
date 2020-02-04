@@ -6,10 +6,11 @@
 // @author       Pill Warker
 // @match        https://prospectsoft.atlassian.net/secure/RapidBoard.jspa*
 // @grant        none
+// @updateURL    https://github.com/willeparker99/Jira-Progress-Bars.git
+// @downloadUrl  https://github.com/willeparker99/Jira-Progress-Bars.git
 // ==/UserScript==
 
 (function() {
-
   (function addCustom() {
     console.log("Refreshing Header")
     const GH = window.GH;
@@ -96,6 +97,7 @@
     };
   })();
 
+  // Helper Functions
   function addGlobalStyle(css) {
     const head = document.querySelector("head");
     const style = document.createElement("style");
