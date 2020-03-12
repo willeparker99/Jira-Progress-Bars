@@ -48,15 +48,12 @@
       }
       index++;
     }
-    console.log(amounts);
     amounts["To Do"] = ((index - amounts["To Do"]) / index) * 100;
     amounts["In Progress"] = ((index - amounts["In Progress"]) / index) * 100;
     amounts["Functional Testing"] =
       ((index - amounts["Functional Testing"]) / index) * 100;
     amounts["QA Testing"] = (amounts["QA Testing"] / index) * 100
     amounts["Done"] = (amounts["Done"] / index) * 100;
-
-    console.log(amounts);
 
     GH.tpl.rapid.swimlane.renderColumnsHeader = function render(
       opt_data,
