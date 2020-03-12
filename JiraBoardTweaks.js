@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Jira Progress Bars
 // @namespace    http://prospectsoft.com/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       Pill Warker
 // @match        https://prospectsoft.atlassian.net/secure/RapidBoard.jspa*
@@ -12,7 +12,7 @@
 
 (function() {
   (function addCustom() {
-    console.log("Refreshing Header")
+    console.log("Refreshing Header");
     const GH = window.GH;
     addGlobalStyle(
       ".tamper-progress-bars { position: absolute; z-index: 1; top: 0px; bottom: 0px; left: 0px; height: inherit; border-radius: 4px }"
@@ -24,7 +24,8 @@
       "To Do": 0,
       "In Progress": 0,
       "Functional Testing": 0,
-      "Done": 0
+      "QA Testing": 0,
+      Done: 0
     };
 
     for (const obj in currentItems) {
@@ -39,18 +40,23 @@
           amounts["Functional Testing"]++;
           break;
         case "QA Testing":
+            amounts["QA Testing"]++
         case "Resolved":
         case "Closed":
           amounts["Done"]++;
           break;
       }
-      index++
+      index++;
     }
-
+    console.log(amounts);
     amounts["To Do"] = ((index - amounts["To Do"]) / index) * 100;
     amounts["In Progress"] = ((index - amounts["In Progress"]) / index) * 100;
-    amounts["Functional Testing"] = ((index - amounts["Functional Testing"]) / index) * 100;
+    amounts["Functional Testing"] =
+      ((index - amounts["Functional Testing"]) / index) * 100;
+    amounts["QA Testing"] = (amounts["QA Testing"] / index) * 100
     amounts["Done"] = (amounts["Done"] / index) * 100;
+
+    console.log(amounts);
 
     GH.tpl.rapid.swimlane.renderColumnsHeader = function render(
       opt_data,
@@ -62,12 +68,19 @@
         ' ghx-fixed"><ul id="ghx-column-headers" class="ghx-column-headers">';
       var columnList162 = opt_data.columns;
       var columnListLen162 = columnList162.length;
+      let header = 0;
       for (
         var columnIndex162 = 0;
         columnIndex162 < columnListLen162;
         columnIndex162++
       ) {
         var columnData162 = columnList162[columnIndex162];
+        let bar;
+        if (header === 3) {
+            bar = createBar(amounts["QA Testing"], 0.2) + createBar(amounts["Done"], 0.2)
+        } else {
+            bar = createBar(amounts[columnData162.name], 0.4)
+        }
         output +=
           '<li class="ghx-column' +
           (columnData162.minBusted ? " ghx-busted ghx-busted-min" : "") +
@@ -90,7 +103,8 @@
               }) +
               "</div>"
             : "") +
-          `<div class="tamper-progress-bars" style="width: ${amounts[columnData162.name]}%;background-color: hsla(${clamp(amounts[columnData162.name], 0, 100)}, 100%, 50%, 0.4)"></div></div></li>`;
+          `${bar}</div></li>`;
+        header++;
       }
       output += '</ul><div id="ghx-swimlane-header-stalker"></div></div>';
       return output;
@@ -107,5 +121,14 @@
   }
   function clamp(number, min, max) {
     return Math.min(Math.max(number, min), max);
+  }
+  function createBar(amountName, alpha){
+    return `<div class="tamper-progress-bars" style="width: ${
+        amountName
+      }%;background-color: hsla(${clamp(
+        amountName,
+        0,
+        100
+      )}, 100%, 50%, ${alpha})"></div>`;
   }
 })();
